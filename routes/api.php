@@ -7,4 +7,9 @@ use App\Http\Controllers\ProductController;
 
 Route::get('/categories', [CategoryController::class, 'index']);
 
-Route::get('/products', [ProductController::class, 'index']);
+
+
+Route::prefix('products')->controller(ProductController::class)->group(function() {
+    Route::get('/', 'index');
+    Route::get('/{slug}', 'show');
+});
