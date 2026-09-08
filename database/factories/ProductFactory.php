@@ -17,12 +17,14 @@ class ProductFactory extends Factory
         // 2. Grab just the first word for the SKU and make it uppercase (e.g., "velvet sofa" -> "VELVET")
         $skuPrefix = strtoupper(explode(' ', $name)[0]);
 
+        $slug = Str::slug($name);
+
         return [
             // Create a category on the fly and grab its ID
             'category_id' => Category::factory(), 
             
             'name' => ucwords($name),
-            'slug' => Str::slug($name),
+            'slug' => $slug,
             
             // Combines the prefix with a random 3-digit number (e.g., VELVET-482)
             'sku' => $skuPrefix . '-' . $this->faker->unique()->numberBetween(100, 999), 
@@ -33,7 +35,7 @@ class ProductFactory extends Factory
             'short_description' => $this->faker->sentence(15), 
             
             // Faker actually has a placeholder image generator we can use for now!
-            'image_url' => $this->faker->imageUrl(640, 480, 'furniture', true), 
+            'image_url' => 'https://picsum.photos/seed/' . $slug . '/640/480', 
         ];
     }
 }
