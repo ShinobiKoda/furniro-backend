@@ -7,31 +7,39 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            
+            // Foreign keys
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
+
+            // Core universal attributes
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('sku')->unique();
             $table->decimal('price', 10, 2);
+            $table->decimal('compare_at_price', 10, 2)->nullable();
             $table->integer('stock');
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_featured')->default(false);
+            
+            // Descriptions & Media
             $table->string('short_description');
+            $table->text('description')->nullable();
             $table->string('image_url')->nullable();
+
+            // The JSONB container for variable specs (material, dimensions, etc.)
+            $table->jsonb('specifications')->nullable();
+
             $table->timestamps();
         });
 
         DB::statement("ALTER TABLE products ENABLE ROW LEVEL SECURITY");
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('products');

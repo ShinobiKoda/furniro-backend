@@ -29,7 +29,12 @@ class ProductController extends Controller
     {
         $product = Product::with(['category', 'reviews'])->where('slug', $slug)->firstOrFail();
 
-        return $product;
+        $relatedProducts = Product::where('category_id', $product->category_id)->where('id', '!=', $product->id)->limit(4)->get();
+
+        return response()->json([
+            'product'=>$product,
+            'related_products'=>$relatedProducts
+        ]);
     }
 
     /**
