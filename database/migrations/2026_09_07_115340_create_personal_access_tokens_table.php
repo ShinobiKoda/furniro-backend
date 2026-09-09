@@ -21,6 +21,8 @@ return new class extends Migration
             $table->timestamp('expires_at')->nullable()->index();
             $table->timestamps();
         });
+
+        DB::statement("ALTER TABLE personal_access_tokens ENABLE ROW LEVEL SECURITY");
     }
 
     /**

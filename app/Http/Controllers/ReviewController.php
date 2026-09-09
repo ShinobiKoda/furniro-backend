@@ -1,17 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Product;
-use Illuminate\Http\Request;
 
-class ProductController extends Controller
+use Illuminate\Http\Request;
+use App\Models\Review;
+
+class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Product::active()->paginate(12);
+        return Review::all();
     }
 
     /**
@@ -25,11 +26,11 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $slug)
+    public function show(string $id)
     {
-        $product = Product::with(['category', 'reviews'])->where('slug', $slug)->firstOrFail();
+        $review = Review::findOrFail($id);
 
-        return $product;
+        return $review;
     }
 
     /**

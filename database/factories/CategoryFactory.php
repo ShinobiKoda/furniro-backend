@@ -19,10 +19,12 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         $name = $this->faker->unique()->words(2, true);
+        $slug = Str::slug($name);
 
         return [
             'name'=>ucwords($name),
-            'slug'=>Str::slug($name)
+            'slug'=>$slug,
+            'image_url' => 'https://picsum.photos/seed/' . $slug . '/640/480',
         ];
     }
 }
