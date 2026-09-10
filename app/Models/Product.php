@@ -27,4 +27,8 @@ class Product extends Model
     public function scopeActive(Builder $query): void{
         $query->where('is_active', true);
     }
+
+    public function cart_item(){
+        return $this->hasMany(CartItem::class);
+    }
 }

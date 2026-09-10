@@ -6,6 +6,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CartItemController;
 
 Route::prefix('products')->controller(ProductController::class)->group(function() {
     Route::get('/', 'index');
@@ -27,5 +29,10 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function (){
 Route::get('/user', [AuthController::class, 'user']);
+
+Route::get('/cart', [CartController::class, 'index']);
+
+Route::post('/cart-items', [CartItemController::class, 'store']);
+
 
 });
