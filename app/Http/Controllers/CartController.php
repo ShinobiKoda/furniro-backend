@@ -22,7 +22,7 @@ class CartController extends Controller
             ]);
        }
 
-       return $cart->load('items.product');
+       return $cart->items()->with('product')->paginate(10);
 
     }
 

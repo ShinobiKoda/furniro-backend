@@ -45,7 +45,7 @@ class CartItemController extends Controller
             ]);
         }
 
-        $cartItem->load('product');
+        $cartItem->load('product')->paginate(10);
 
 
         return response()->json([
