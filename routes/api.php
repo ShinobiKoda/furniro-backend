@@ -22,8 +22,10 @@ Route::prefix('reviews')->controller(ReviewController::class)->group(function ()
     Route::get('/{id}', 'show');
 });
 
-Route::middleware('auth:sanctum')->group(function (){
-    Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
+Route::middleware('auth:sanctum')->group(function (){
+Route::get('/user', [AuthController::class, 'user']);
 
 });

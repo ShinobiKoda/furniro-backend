@@ -19,9 +19,9 @@ class AuthController extends Controller
         //create user and hash password
 
         $user = User::create([
-            'name'=> $validated(['name']),
-            'email'=>$validated(['email']),
-            'password'=>$validated(['password'])
+            'name'=> $validated['name'],
+            'email'=>$validated['email'],
+            'password'=>$validated['password']
         ]);
 
         //generate token for user
@@ -33,5 +33,32 @@ class AuthController extends Controller
             'user'=>$user,
             'token'=>$token
         ]);
+    }
+
+    public function login(Request $request){
+        $validated = $request->validate([
+            "email"=> "required|email",
+            "password"=> "required|string",
+        ]);
+
+        $user = User::where('email', $validated['email'])->first();
+
+        if(!$user || Hash::check($validated['password'], $user->password)){
+            return response()->json([
+                'message'=>'Invalid Credentials'
+            ], 401);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'user'=>$user,
+            'token'=>$token
+            ]
+        );
+    }
+
+    public function user(Request $request){
+        return response()->json($request->user());
     }
 }
