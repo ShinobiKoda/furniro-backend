@@ -50,7 +50,7 @@ class CartItemController extends Controller
 
         return response()->json([
             'message' => 'Item added to cart succesfully',
-            'item' => $cartItem,
+            'data' => $cartItem,
         ]);
     }
 
@@ -96,7 +96,7 @@ class CartItemController extends Controller
 
         return response()->json([
             'message' => 'Item updated successfully',
-            'items' => $cartItems
+            'data' => $cartItems
         ]);
     }
 
@@ -130,11 +130,11 @@ class CartItemController extends Controller
 
 
         //return remaining cart items
-        $cartItems = CartItem::where('cart_id', $cart->id)->with('products')->get();
+        $cartItems = CartItem::where('cart_id', $cart->id)->with('product')->get();
 
         return response()->json([
             'message' => "Item deleted sucessfully",
-            'items' => $cartItems
+            'data' => $cartItems
         ]);
     }
 }

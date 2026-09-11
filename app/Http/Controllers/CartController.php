@@ -18,11 +18,11 @@ class CartController extends Controller
 
        if(!$cart){
             return response()->json([
-                'items'=>[],
+                'data'=>[],
             ]);
        }
 
-       return $cart->items()->with('product')->paginate(10);
+       return $cart->items()->with('product')->get();
 
     }
 
