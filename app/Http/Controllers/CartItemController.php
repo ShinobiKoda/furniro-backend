@@ -45,7 +45,7 @@ class CartItemController extends Controller
             ]);
         }
 
-        $cartItem->load('product')->paginate(10);
+        $cartItem->load('product');
 
 
         return response()->json([
@@ -67,14 +67,74 @@ class CartItemController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = $request->user();
+
+        $cart = $user->cart;
+
+        if (!$cart) {
+            return response()->json([
+                'message' => 'You dont have cart'
+            ], 404);
+        }
+
+        $cartItem = CartItem::where('id', $id)->where('cart_id', $cart->id)->first();
+
+        if (!$cartItem) {
+            return response()->json([
+                'message' => 'This Item does not exist'
+            ], 404);
+        }
+
+        $validated = $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+
+        $cartItem->update(['quantity'=>$validated['quantity']]);
+
+        $cartItems = CartItem::where('cart_id', $cart->id)->with('product')->get();
+
+        return response()->json([
+            'message' => 'Item updated successfully',
+            'items' => $cartItems
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, Request $request)
     {
-        //
+
+        // Get the user making the request
+        $user = $request->user();
+
+
+        //get their cart id
+        $cart = $user->cart;
+
+        //if they dont have a cart return a message
+        if (!$cart) {
+            return response()->json([
+                'message' => 'You dont have a cart',
+            ], 404);
+        }
+
+        $cartItem = CartItem::where('id', $id)->where('cart_id', $cart->id)->first();
+
+        if (!$cartItem) {
+            return response()->json(['message' => 'Item not found in your cart'], 404);
+        }
+
+        $cartItem->delete();
+
+
+        //return remaining cart items
+        $cartItems = CartItem::where('cart_id', $cart->id)->with('products')->get();
+
+        return response()->json([
+            'message' => "Item deleted sucessfully",
+            'items' => $cartItems
+        ]);
     }
 }

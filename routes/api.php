@@ -33,6 +33,7 @@ Route::get('/user', [AuthController::class, 'user']);
 Route::get('/cart', [CartController::class, 'index']);
 
 Route::post('/cart-items', [CartItemController::class, 'store']);
-
+Route::patch('/cart-items/{id}', [CartItemController::class, 'update']);
+Route::delete('/cart-items/{id}', [CartItemController::class, 'destroy']);
 
 });
